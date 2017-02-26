@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>User Manager for JavaRush</title>
+    <title>User Manager</title>
     <meta http-equiv="refresh" content="0; url=/users" />
 </head>
 <body>
