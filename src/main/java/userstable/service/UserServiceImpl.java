@@ -42,8 +42,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<UserEntity> listUsers(UsersFilter filter, int page, int length) {
-        return userDao.listUsers(filter, page, length);
+    public List<UserEntity> listUsers(UsersFilter filter) {
+        return userDao.listUsers(filter);
     }
 
     @Override

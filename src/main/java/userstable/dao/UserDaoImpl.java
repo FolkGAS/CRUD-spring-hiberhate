@@ -63,13 +63,18 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<UserEntity> listUsers(UsersFilter filter, int page, int length) {
-        int start = (page - 1) * length;
+    public List<UserEntity> listUsers(UsersFilter filter) {
+//        int start = (page - 1) * length;
+
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<UserEntity> cquery = builder.createQuery(UserEntity.class);
         Root<UserEntity> root = cquery.from(UserEntity.class);
 
+        if (filter.getEntriesPerPage() < 1)
+            filter.setEntriesPerPage(5);
+        if (filter.getPage() < 1)
+            filter.setPage(1);
         setQueryFilter(filter);
         Timestamp fromDate = new Timestamp(new Date(queryFilter.getDateStart()).getTime());
         Timestamp toDate = new Timestamp(new Date(queryFilter.getDateEnd()).getTime());
@@ -81,7 +86,11 @@ public class UserDaoImpl implements UserDao {
                 builder.equal(root.get("isAdmin"), queryFilter.isAdmin()),
                 builder.between(root.get("createdDate"), fromDate, toDate))));
 
-        List<UserEntity> usersList = session.createQuery(cquery).setFirstResult(start).setMaxResults(length).getResultList();
+        int length = queryFilter.getEntriesPerPage();
+        int start = (queryFilter.getPage() - 1) * length ;
+        List<UserEntity> usersList = session.createQuery(cquery).
+                setFirstResult(start).
+                setMaxResults(length).getResultList();
 
         if (usersList.size() > 0)
             for (UserEntity userEntity : usersList)
@@ -98,6 +107,10 @@ public class UserDaoImpl implements UserDao {
         CriteriaQuery<Long> cquery = builder.createQuery(Long.class);
         Root<UserEntity> root = cquery.from(UserEntity.class);
 
+        if (filter.getEntriesPerPage() < 1)
+            filter.setEntriesPerPage(5);
+        if (filter.getPage() < 1)
+            filter.setPage(1);
         setQueryFilter(filter);
         Timestamp fromDate = new Timestamp(new Date(queryFilter.getDateStart()).getTime());
         Timestamp toDate = new Timestamp(new Date(queryFilter.getDateEnd()).getTime());
@@ -129,5 +142,6 @@ public class UserDaoImpl implements UserDao {
             queryFilter.setDateStart("2000/01/01");
         if (queryFilter.getDateEnd() == null || queryFilter.getDateEnd().trim().equals(""))
             queryFilter.setDateEnd("3000/01/01");
+
     }
 }

@@ -218,21 +218,35 @@
 
 <h1>List of users</h1>
 
-<script type="text/javascript">
-    for (var i = 1; i <= ${pagesCount}; i++)
-        document.write(" <a href='/users/" + i + "'>" + i + "</a> &emsp;");
-</script>
+<%--<script type="text/javascript">--%>
+    <%--for (var i = 1; i <= ${pagesCount}; i++)--%>
+        <%--document.write(" <a href='/users/" + i + "'>" + i + "</a> &emsp;");--%>
+<%--</script>--%>
 
 <c:url var="pages" value="/users"/>
 
-<%--<form:form action="${pages}" commandName="pages">--%>
-<%--<c--%>
+<form:form action="${pages}" commandName="filter">
+
 <%--<c:forEach items="${pagesCount}" var ="page">--%>
-<%--<a href="/users">${page}</a>--%>
+<%--<a href="/users">${filter.page}</a>--%>
 <%--</c:forEach>--%>
-<%--<input type="submit"--%>
-<%--value="<spring:message text="page"/>"/>--%>
-<%--</form:form>--%>
+    <form:label path="page">
+        <spring:message text="page"/>
+    </form:label>
+    </td>
+    <td>
+        <form:input path="page" size="4"/>
+    </td>
+    <form:label path="entriesPerPage">
+        <spring:message text="Entries per page"/>
+    </form:label>
+    </td>
+    <td>
+        <form:input path="entriesPerPage" size="4" placeholder = "${filter.entriesPerPage}"/>
+    </td>
+<input type="submit"
+value="<spring:message text="GO"/>"/>
+</form:form>
 
 <br/>
 <c:if test="${!empty listUsers}">

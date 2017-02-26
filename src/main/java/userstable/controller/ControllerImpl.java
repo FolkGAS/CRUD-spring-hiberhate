@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 
 @SessionAttributes(value = "filter")
 @Controller
-public class ControllerImpl implements userstable.controller.Controller {
+public class ControllerImpl {
     private UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
     private int length = 5;
@@ -33,22 +33,17 @@ public class ControllerImpl implements userstable.controller.Controller {
         return new UsersFilter();
     }
 
-    @Override
-    @RequestMapping(value = {"users/{page}", "users"})
+    @RequestMapping(value = "users")
     public String listUsers(Model model,
-                            @ModelAttribute(value = "filter") UsersFilter filter,
-                            @PathVariable(value = "page", required = false) Integer page) {
-        if (page == null)
-            page = 1;
+                            @ModelAttribute(value = "filter") UsersFilter filter) {
 
         model.addAttribute("filter", filter);
         model.addAttribute("user", new UserEntity());
-        model.addAttribute("listUsers", userService.listUsers(filter, page, length));
+        model.addAttribute("listUsers", userService.listUsers(filter));
         model.addAttribute("pagesCount", Math.ceil(userService.usersCount(filter) * 1.0 / length));
         return "users";
     }
 
-    @Override
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)
     public String addUser(@ModelAttribute("user") UserEntity userEntity) {
         userEntity.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
@@ -59,25 +54,22 @@ public class ControllerImpl implements userstable.controller.Controller {
         return "redirect:/users";
     }
 
-    @Override
     @RequestMapping("/remove/{id}")
     public String removeUser(@PathVariable("id") int id) {
         userService.removeUser(id);
         return "redirect:/users";
     }
 
-    @Override
     @RequestMapping("edit/{id}")
     public String editUser(Model model,
                            @ModelAttribute(value = "filter") UsersFilter filter,
                            @PathVariable("id") int id) {
         model.addAttribute("filter", getUsersFilter());
         model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("listUsers", userService.listUsers(filter, 1, length));
+        model.addAttribute("listUsers", userService.listUsers(filter));
         return "users";
     }
 
-    @Override
     @RequestMapping("userData/{id}")
     public String userData(Model model, @PathVariable("id") int id) {
         model.addAttribute("user", userService.getUserById(id));

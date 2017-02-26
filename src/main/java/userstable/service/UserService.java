@@ -14,7 +14,7 @@ public interface UserService {
 
     public UserEntity getUserById(int id);
 
-    public List<UserEntity> listUsers(UsersFilter filter, int page, int length);
+    public List<UserEntity> listUsers(UsersFilter filter);
 
     public int usersCount(UsersFilter filter);
 
