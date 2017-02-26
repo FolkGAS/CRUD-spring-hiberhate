@@ -71,11 +71,4 @@ public class ControllerImpl {
         model.addAttribute("pagesCount", (int)Math.ceil(userService.usersCount(filter) * 1.0 / filter.getEntriesPerPage()));
         return "users";
     }
-
-    @RequestMapping("userData/{id}")
-    public String userData(Model model, @PathVariable("id") int id) {
-        model.addAttribute("user", userService.getUserById(id));
-        return "userData";
-    }
-
 }
