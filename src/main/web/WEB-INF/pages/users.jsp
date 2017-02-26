@@ -95,7 +95,7 @@
                         </form:label>
                     </td>
                     <td>
-                        <form:input path="createdDate" readonly="true" disabled="true" value = "${user.createdDate}"/>
+                        <form:input path="createdDate" readonly="true" disabled="true" value="${user.createdDate}"/>
                     </td>
                 </tr>
                 <tr>
@@ -219,33 +219,34 @@
 <h1>List of users</h1>
 
 <%--<script type="text/javascript">--%>
-    <%--for (var i = 1; i <= ${pagesCount}; i++)--%>
-        <%--document.write(" <a href='/users/" + i + "'>" + i + "</a> &emsp;");--%>
+<%--for (var i = 1; i <= ${pagesCount}; i++)--%>
+<%--document.write(" <a href='/users/" + i + "'>" + i + "</a> &emsp;");--%>
 <%--</script>--%>
 
 <c:url var="pages" value="/users"/>
 
 <form:form action="${pages}" commandName="filter">
 
-<%--<c:forEach items="${pagesCount}" var ="page">--%>
-<%--<a href="/users">${filter.page}</a>--%>
-<%--</c:forEach>--%>
-    <form:label path="page">
-        <spring:message text="page"/>
-    </form:label>
-    </td>
-    <td>
-        <form:input path="page" size="4"/>
-    </td>
+    <c:forEach begin="1" end="${pagesCount}" step="1" varStatus="i">
+        <td>
+            <form:label path="page">
+                <spring:message text="page"/>
+            </form:label>
+        </td>
+        <td>
+            <form:input path="page" size="4"/>
+        </td>
+    </c:forEach>
     <form:label path="entriesPerPage">
         <spring:message text="Entries per page"/>
     </form:label>
-    </td>
+
     <td>
-        <form:input path="entriesPerPage" size="4" placeholder = "${filter.entriesPerPage}"/>
+        <form:input path="entriesPerPage" size="4" placeholder="${filter.entriesPerPage}"/>
     </td>
-<input type="submit"
-value="<spring:message text="GO"/>"/>
+    <input type="submit"
+           value="<spring:message text="GO"/>"/>
+
 </form:form>
 
 <br/>
