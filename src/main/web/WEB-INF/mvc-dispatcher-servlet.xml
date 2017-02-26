@@ -60,6 +60,7 @@
         <property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory"/>
     </bean>
 
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:default-servlet-handler/>
     <mvc:annotation-driven/>
 

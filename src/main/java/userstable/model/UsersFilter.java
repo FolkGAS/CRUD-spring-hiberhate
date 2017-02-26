@@ -6,7 +6,7 @@ public class UsersFilter {
     private Integer ageStart, ageEnd;
     private boolean isAdmin;
     private String dateStart, dateEnd;
-    private Integer page;
+    private int page, usersPerPage;
 
     public Integer getIdStart() {
         return idStart;
@@ -72,32 +72,19 @@ public class UsersFilter {
         this.dateEnd = dateEnd;
     }
 
-    public Integer getPage() {
+    public int getPage() {
         return page;
     }
 
-    public void setPage(Integer page) {
+    public void setPage(int page) {
         this.page = page;
     }
 
-    @Override
-    public UsersFilter clone(){
-        UsersFilter clone = new UsersFilter();
-        if (idStart != null)
-            clone.setIdStart(idStart);
-        if (idEnd != null)
-            clone.setIdEnd(idEnd);
-        if (name != null)
-            clone.setName(new String(name));
-        if (ageStart != null)
-            clone.setAgeStart(ageStart);
-        if (ageEnd != null)
-            clone.setAgeEnd(ageEnd);
-        if (dateStart != null)
-            clone.setDateStart(dateStart);
-        if (dateEnd != null)
-            clone.setDateEnd(dateEnd);
-        clone.setAdmin(isAdmin);
-        return clone;
+    public int getUsersPerPage() {
+        return usersPerPage;
+    }
+
+    public void setUsersPerPage(int usersPerPage) {
+        this.usersPerPage = usersPerPage;
     }
 }

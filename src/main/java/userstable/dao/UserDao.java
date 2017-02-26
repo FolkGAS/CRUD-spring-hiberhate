@@ -6,15 +6,15 @@ import userstable.model.UsersFilter;
 import java.util.List;
 
 public interface UserDao {
-    public void addUser(UserEntity userEntity);
+    void addUser(UserEntity userEntity);
 
-    public void updateUser(UserEntity userEntity);
+    void updateUser(UserEntity userEntity);
 
-    public void removeUser(int id);
+    void removeUser(int id);
 
-    public UserEntity getUserById(int id);
+    UserEntity getUserById(int id);
 
-    public List<UserEntity> listUsers(UsersFilter filter, int page, int length);
+    List<UserEntity> listUsers(UsersFilter filter);
 
-    public int usersCount(UsersFilter filter);
+    int usersCount(UsersFilter filter);
 }

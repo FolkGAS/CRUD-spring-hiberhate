@@ -8,3 +8,5 @@
 out/
 src/test/
 target/
+.idea/
+classes/
