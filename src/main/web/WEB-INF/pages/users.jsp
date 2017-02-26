@@ -201,12 +201,12 @@
                             <spring:message text="Admin"/>
                         </form:label>
                     </td>
-                    <td colspan="3">
+                    <td>
                         <form:checkbox path="admin"/>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
+                    <td>
                         <input type="submit"
                                value="<spring:message text="Filter Users"/>"/>
                     </td>
@@ -218,55 +218,88 @@
 
 <h1>List of users</h1>
 
-<%--<script type="text/javascript">--%>
-<%--for (var i = 1; i <= ${pagesCount}; i++)--%>
-<%--document.write(" <a href='/users/" + i + "'>" + i + "</a> &emsp;");--%>
-<%--</script>--%>
-
 <c:url var="pages" value="/users"/>
 
 <form:form action="${pages}" commandName="filter">
+    <table>
+        <tr>
+            <td>
+                <form:label path="entriesPerPage">
+                    <spring:message text="Users per page"/>
+                </form:label>
+            </td>
+            <td>
+                <form:input path="entriesPerPage" size="1"/>
+            </td>
+            <td>
+                <input type="submit"
+                       value="<spring:message text="set"/>"/>
+            </td>
+        </tr>
+    </table>
 
-    <c:forEach begin="1" end="${pagesCount}" step="1" varStatus="i">
-        <td>
-            <form:label path="page">
-                <spring:message text="page"/>
-            </form:label>
-        </td>
-        <td>
-            <form:input path="page" size="4"/>
-        </td>
-    </c:forEach>
-    <form:label path="entriesPerPage">
-        <spring:message text="Entries per page"/>
-    </form:label>
+    <table>
+        <c:url var="pages" value="/users"/>
 
-    <td>
-        <form:input path="entriesPerPage" size="4" placeholder="${filter.entriesPerPage}"/>
-    </td>
-    <input type="submit"
-           value="<spring:message text="GO"/>"/>
+        <form:form action="${pages}" commandName="filter">
+            <td>
+                <c:if test="${filter.page < 1}">
+                    <input type="hidden" name="page" value="${1}"/>
+                </c:if>
+                <c:if test="${filter.page > 1}">
+                    <input type="hidden" name="page" value="${filter.page - 1}"/>
+                </c:if>
+                <input type="submit" name="prev" value="<spring:message text="prev"/>"/>
+                    ${filter.page}
+            </td>
+        </form:form>
 
+        <form:form action="${pages}" commandName="filter">
+            <td>
+                <c:if test="${filter.page >= pagesCount}">
+                    <input type="hidden" name="page" value="${pagesCount}"/>
+                </c:if>
+                <c:if test="${filter.page < pagesCount}">
+                    <input type="hidden" name="page" value="${filter.page + 1}"/>
+                </c:if>
+                <input type="submit" name="next" value="<spring:message text="next"/>"/>
+            </td>
+        </form:form>
+    </table>
 </form:form>
 
-<br/>
+<form:form action="${pages}" commandName="filter">
+    <c:forEach begin="1" end="${pagesCount}" step="1" varStatus="i">
+        <td>
+            <input type="submit" name="page" value="${i.index}"/>
+        </td>
+    </c:forEach>
+</form:form>
+
 <c:if test="${!empty listUsers}">
     <table class="tg">
         <tr>
-            <th width="80">ID</th>
-            <th width="120">Name</th>
-            <th width="120">Age</th>
-            <th width="120">Admin</th>
-            <th width="120">Date</th>
+            <th width="40">ID</th>
+            <th width="200">Name</th>
+            <th width="40">Age</th>
+            <th width="20">Admin</th>
+            <th width="150">Date</th>
             <th width="60">Edit</th>
             <th width="60">Delete</th>
         </tr>
         <c:forEach items="${listUsers}" var="user">
             <tr>
                 <td>${user.id}</td>
-                <td><a href="/userData/${user.id}" target="_blank">${user.name}</a></td>
+                <td>${user.name}</td>
                 <td>${user.age}</td>
-                <td>${user.admin}</td>
+                <td>
+                    <c:if test="${true == user.admin}">
+                        <img src="/resources/check.png">
+                    </c:if>
+                    <c:if test="${false == user.admin}">
+                        <img src="/resources/uncheck.png">
+                    </c:if>
+                </td>
                 <td>${user.createdDate}</td>
                 <td><a href="<c:url value='/edit/${user.id}'/>">Edit</a></td>
                 <td><a href="<c:url value='/remove/${user.id}'/>">Delete</a></td>
@@ -274,6 +307,5 @@
         </c:forEach>
     </table>
 </c:if>
-
 </body>
 </html>

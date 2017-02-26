@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 public class ControllerImpl {
     private UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
-    private int length = 5;
 
     @Autowired(required = true)
     @Qualifier(value = "userService")
@@ -36,11 +35,13 @@ public class ControllerImpl {
     @RequestMapping(value = "users")
     public String listUsers(Model model,
                             @ModelAttribute(value = "filter") UsersFilter filter) {
+        if (filter.getEntriesPerPage() < 1)
+            filter.setEntriesPerPage(5);
 
         model.addAttribute("filter", filter);
         model.addAttribute("user", new UserEntity());
         model.addAttribute("listUsers", userService.listUsers(filter));
-        model.addAttribute("pagesCount", Math.ceil(userService.usersCount(filter) * 1.0 / length));
+        model.addAttribute("pagesCount", (int)Math.ceil(userService.usersCount(filter) * 1.0 / filter.getEntriesPerPage()));
         return "users";
     }
 

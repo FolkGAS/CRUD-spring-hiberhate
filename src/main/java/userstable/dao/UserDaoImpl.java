@@ -9,6 +9,7 @@ import userstable.model.UsersFilter;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -64,28 +65,13 @@ public class UserDaoImpl implements UserDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<UserEntity> listUsers(UsersFilter filter) {
-//        int start = (page - 1) * length;
 
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<UserEntity> cquery = builder.createQuery(UserEntity.class);
         Root<UserEntity> root = cquery.from(UserEntity.class);
 
-        if (filter.getEntriesPerPage() < 1)
-            filter.setEntriesPerPage(5);
-        if (filter.getPage() < 1)
-            filter.setPage(1);
-        setQueryFilter(filter);
-        Timestamp fromDate = new Timestamp(new Date(queryFilter.getDateStart()).getTime());
-        Timestamp toDate = new Timestamp(new Date(queryFilter.getDateEnd()).getTime());
-
-        cquery.select(root).where((builder.and(
-                builder.between(root.get("id"), queryFilter.getIdStart(), queryFilter.getIdEnd()),
-                builder.like(root.get("name"), "%" + queryFilter.getName() + "%"),
-                builder.between(root.get("age"), queryFilter.getAgeStart(), queryFilter.getAgeEnd()),
-                builder.equal(root.get("isAdmin"), queryFilter.isAdmin()),
-                builder.between(root.get("createdDate"), fromDate, toDate))));
-
+        cquery.select(root).where(getExpression(filter, builder, root));
         int length = queryFilter.getEntriesPerPage();
         int start = (queryFilter.getPage() - 1) * length ;
         List<UserEntity> usersList = session.createQuery(cquery).
@@ -107,41 +93,44 @@ public class UserDaoImpl implements UserDao {
         CriteriaQuery<Long> cquery = builder.createQuery(Long.class);
         Root<UserEntity> root = cquery.from(UserEntity.class);
 
-        if (filter.getEntriesPerPage() < 1)
-            filter.setEntriesPerPage(5);
-        if (filter.getPage() < 1)
-            filter.setPage(1);
-        setQueryFilter(filter);
-        Timestamp fromDate = new Timestamp(new Date(queryFilter.getDateStart()).getTime());
-        Timestamp toDate = new Timestamp(new Date(queryFilter.getDateEnd()).getTime());
-
-        cquery.select(builder.count(root)).where((builder.and(
-                builder.between(root.get("id"), queryFilter.getIdStart(), queryFilter.getIdEnd()),
-                builder.like(root.get("name"), "%" + queryFilter.getName() + "%"),
-                builder.between(root.get("age"), queryFilter.getAgeStart(), queryFilter.getAgeEnd()),
-                builder.equal(root.get("isAdmin"), queryFilter.isAdmin()),
-                builder.between(root.get("createdDate"), fromDate, toDate))));
+        cquery.select(builder.count(root)).where(getExpression(filter, builder, root));
         int count = ((Long)session.createQuery(cquery).getSingleResult()).intValue();
         return count;
     }
 
-    public void setQueryFilter(UsersFilter filter) {
+    public Expression<Boolean> getExpression(UsersFilter filter, CriteriaBuilder builder, Root<UserEntity> root) {
         queryFilter = filter.clone();
 
-        if (queryFilter.getIdStart() == null)
+        if (queryFilter.getIdStart() == null || queryFilter.getIdStart() < 0)
             queryFilter.setIdStart(0);
         if (queryFilter.getIdEnd() == null)
             queryFilter.setIdEnd(Integer.MAX_VALUE);
         if (queryFilter.getName() == null || filter.getName().trim().equals(""))
             queryFilter.setName("%");
-        if (queryFilter.getAgeStart() == null)
+        if (queryFilter.getAgeStart() == null || queryFilter.getAgeStart() < 0)
             queryFilter.setAgeStart(0);
         if (queryFilter.getAgeEnd() == null)
             queryFilter.setAgeEnd(Integer.MAX_VALUE);
-        if (queryFilter.getDateStart() == null || queryFilter.getDateStart().trim().equals(""))
+        if (queryFilter.getDateStart() == null || !queryFilter.getDateStart().trim().matches("\\d{4}/\\d{2}/\\d{2}"))
             queryFilter.setDateStart("2000/01/01");
-        if (queryFilter.getDateEnd() == null || queryFilter.getDateEnd().trim().equals(""))
+        if (queryFilter.getDateEnd() == null || !queryFilter.getDateEnd().trim().matches("\\d{4}/\\d{2}/\\d{2}"))
             queryFilter.setDateEnd("3000/01/01");
+        if (queryFilter.getEntriesPerPage() < 1)
+            queryFilter.setEntriesPerPage(5);
+        if (queryFilter.getPage() < 1)
+            queryFilter.setPage(1);
+
+        Timestamp fromDate = new Timestamp(new Date(queryFilter.getDateStart().trim()).getTime());
+        Timestamp toDate = new Timestamp(new Date(queryFilter.getDateEnd().trim()).getTime());
+
+        Expression<Boolean> expression = (builder.and(
+                builder.between(root.get("id"), queryFilter.getIdStart(), queryFilter.getIdEnd()),
+                builder.like(root.get("name"), "%" + queryFilter.getName() + "%"),
+                builder.between(root.get("age"), queryFilter.getAgeStart(), queryFilter.getAgeEnd()),
+                builder.between(root.get("createdDate"), fromDate, toDate)));
+        if (queryFilter.isAdmin())
+            expression = builder.and(expression, builder.equal(root.get("isAdmin"), queryFilter.isAdmin()));
+        return expression;
 
     }
 }
