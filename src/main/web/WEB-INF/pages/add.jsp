@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@ taglib prefix="from" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <h1>Add a User</h1>
 <c:url var="addAction" value="/users/add"/>
@@ -16,8 +16,9 @@
                     </form:label>
                 </td>
                 <td>
-                    <form:input path="id" readonly="true" disabled="true"/>
-                    <form:hidden path="id"/>
+                    <form:input path="id"
+                                readonly="true"
+                                disabled="true"/>
                 </td>
             </tr>
         </c:if>
@@ -28,7 +29,8 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="name"/>
+                <form:input path="name"
+                            required="true"/>
             </td>
         </tr>
         <tr>
@@ -38,7 +40,10 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="age"/>
+                <form:input path="age"
+                            pattern="[1-9]+\d*"
+                            required="true"
+                            title="positive number"/>
             </td>
         </tr>
         <tr>
@@ -48,7 +53,14 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="createdDate" readonly="true" disabled="true" value="${user.createdDate}"/>
+                <fmt:formatDate value="${user.createdDate}"
+                                pattern="yyyy/MM/dd hh:mm:ss"
+                                var="formattedDate"/>
+
+                <form:input path="createdDate"
+                            readonly="true"
+                            disabled="true"
+                            value="${formattedDate}"/>
             </td>
         </tr>
         <tr>
@@ -58,7 +70,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="admin"/>
+                <form:checkbox path="admin"/>
             </td>
         </tr>
         <tr>

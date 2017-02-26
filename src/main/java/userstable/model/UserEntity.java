@@ -9,8 +9,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "users", schema = "crudtest")
-public class UserEntity {
-
+public class UserEntity
+{
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,50 +34,61 @@ public class UserEntity {
     @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private Timestamp createdDate = new Timestamp(new Date().getTime());
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
 
-    public int getAge() {
+    public int getAge()
+    {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(int age)
+    {
         this.age = age;
     }
 
-    public boolean isAdmin() {
+    public boolean isAdmin()
+    {
         return isAdmin;
     }
 
-    public void setAdmin(boolean isAdmin) {
+    public void setAdmin(boolean isAdmin)
+    {
         this.isAdmin = isAdmin;
     }
 
-    public Timestamp getCreatedDate() {
+    public Timestamp getCreatedDate()
+    {
         return createdDate;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Timestamp createdDate)
+    {
         this.createdDate = createdDate;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -88,17 +99,28 @@ public class UserEntity {
         if (isAdmin != that.isAdmin) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (createdDate != null ? !createdDate.equals(that.createdDate) : that.createdDate != null) return false;
-
         return true;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + age;
         result = 31 * result + (isAdmin ? 1 : 0);
         result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", isAdmin=" + isAdmin +
+                ", createdDate=" + createdDate +
+                '}';
     }
 }

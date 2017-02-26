@@ -12,13 +12,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class UserDaoImpl implements UserDao {
     private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
     private SessionFactory sessionFactory;
-    private UsersFilter queryFilter;
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -41,7 +42,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void removeUser(int id) {
         Session session = sessionFactory.getCurrentSession();
-        UserEntity userEntity = session.load(UserEntity.class, new Integer(id));
+        UserEntity userEntity = session.load(UserEntity.class, id);
         if (userEntity != null) {
             session.delete(userEntity);
             logger.info("User removed. User : " + userEntity);
@@ -53,7 +54,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public UserEntity getUserById(int id) {
         Session session = sessionFactory.getCurrentSession();
-        UserEntity userEntity = session.load(UserEntity.class, new Integer(id));
+        UserEntity userEntity = session.load(UserEntity.class, id);
         if (userEntity != null) {
             logger.info("Getting user by ID = " + id + ". User : " + userEntity);
         } else {
@@ -65,16 +66,15 @@ public class UserDaoImpl implements UserDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<UserEntity> listUsers(UsersFilter filter) {
-
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<UserEntity> cquery = builder.createQuery(UserEntity.class);
-        Root<UserEntity> root = cquery.from(UserEntity.class);
+        CriteriaQuery<UserEntity> cQuery = builder.createQuery(UserEntity.class);
+        Root<UserEntity> root = cQuery.from(UserEntity.class);
 
-        cquery.select(root).where(getExpression(filter, builder, root));
-        int length = queryFilter.getEntriesPerPage();
-        int start = (queryFilter.getPage() - 1) * length ;
-        List<UserEntity> usersList = session.createQuery(cquery).
+        cQuery.select(root).where(getExpression(filter, builder, root));
+        int length = filter.getUsersPerPage();
+        int start = (filter.getPage() - 1) * length;
+        List<UserEntity> usersList = session.createQuery(cQuery).
                 setFirstResult(start).
                 setMaxResults(length).getResultList();
 
@@ -94,49 +94,57 @@ public class UserDaoImpl implements UserDao {
         Root<UserEntity> root = cquery.from(UserEntity.class);
 
         cquery.select(builder.count(root)).where(getExpression(filter, builder, root));
-        int count = ((Long)session.createQuery(cquery).getSingleResult()).intValue();
-        return count;
+        return (session.createQuery(cquery).getSingleResult()).intValue();
     }
 
-    public Expression<Boolean> getExpression(UsersFilter filter, CriteriaBuilder builder, Root<UserEntity> root) {
-        queryFilter = filter.clone();
+    private Expression<Boolean> getExpression(UsersFilter filter, CriteriaBuilder builder, Root<UserEntity> root) {
+        DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        Expression<Boolean> expression = builder.ge(root.get("id"), 0);
+        if (filter.getUsersPerPage() < 1)
+            filter.setUsersPerPage(5);
 
-        if (queryFilter.getIdStart() == null || queryFilter.getIdStart() < 0)
-            queryFilter.setIdStart(0);
-        if (queryFilter.getIdEnd() == null)
-            queryFilter.setIdEnd(Integer.MAX_VALUE);
-        if (queryFilter.getName() == null || filter.getName().trim().equals(""))
-            queryFilter.setName("%");
-        if (queryFilter.getAgeStart() == null || queryFilter.getAgeStart() < 0)
-            queryFilter.setAgeStart(0);
-        if (queryFilter.getAgeEnd() == null)
-            queryFilter.setAgeEnd(Integer.MAX_VALUE);
-        if (queryFilter.getDateStart() == null || !queryFilter.getDateStart().trim().matches("\\d{4}/\\d{2}/\\d{2}"))
-        {
-            queryFilter.setDateStart("2000/01/01");
-            filter.setDateStart("");
+        if (filter.getPage() < 1)
+            filter.setPage(1);
+
+        if (filter.getIdStart() != null && filter.getIdStart() >= 0)
+            expression = builder.and(expression, builder.ge(root.get("id"), filter.getIdStart()));
+
+        if (filter.getIdEnd() != null)
+            expression = builder.and(expression, builder.le(root.get("id"), filter.getIdEnd()));
+
+        if (filter.getName() != null && !filter.getName().trim().equals(""))
+            expression = builder.and(expression, builder.like(root.get("name"), "%" + filter.getName() + "%"));
+
+        if (filter.getAgeStart() != null && filter.getAgeStart() >= 0)
+            expression = builder.and(expression, builder.ge(root.get("age"), filter.getAgeStart()));
+
+        if (filter.getAgeEnd() != null)
+            expression = builder.and(expression, builder.le(root.get("age"), filter.getAgeEnd()));
+
+        if (filter.isAdmin())
+            expression = builder.and(expression, builder.equal(root.get("isAdmin"), filter.isAdmin()));
+
+        if (filter.getDateStart() != null && filter.getDateStart().trim().matches("\\d{4}/\\d{2}/\\d{2}")) {
+            Timestamp fromDate;
+            try {
+                fromDate = new Timestamp(formatter.parse(filter.getDateStart().trim()).getTime());
+            } catch (ParseException e) {
+                logger.info("Wrong date format. Date: " + filter.getDateStart());
+                fromDate = new Timestamp(0);
+            }
+            expression = builder.and(expression, builder.greaterThanOrEqualTo(root.get("createdDate"), fromDate));
         }
-        if (queryFilter.getDateEnd() == null || !queryFilter.getDateEnd().trim().matches("\\d{4}/\\d{2}/\\d{2}"))
-        {
-            queryFilter.setDateEnd("3000/01/01");
-            filter.setDateEnd("");
+
+        if (filter.getDateEnd() != null && filter.getDateEnd().trim().matches("\\d{4}/\\d{2}/\\d{2}")) {
+            Timestamp toDate;
+            try {
+                toDate = new Timestamp(formatter.parse(filter.getDateEnd().trim()).getTime());
+            } catch (ParseException e) {
+                logger.info("Wrong date format. Date: " + filter.getDateEnd());
+                toDate = new Timestamp(Integer.MAX_VALUE);
+            }
+            expression = builder.and(expression, builder.lessThanOrEqualTo(root.get("createdDate"), toDate));
         }
-        if (queryFilter.getEntriesPerPage() < 1)
-            queryFilter.setEntriesPerPage(5);
-        if (queryFilter.getPage() < 1)
-            queryFilter.setPage(1);
-
-        Timestamp fromDate = new Timestamp(new Date(queryFilter.getDateStart().trim()).getTime());
-        Timestamp toDate = new Timestamp(new Date(queryFilter.getDateEnd().trim()).getTime());
-
-        Expression<Boolean> expression = (builder.and(
-                builder.between(root.get("id"), queryFilter.getIdStart(), queryFilter.getIdEnd()),
-                builder.like(root.get("name"), "%" + queryFilter.getName() + "%"),
-                builder.between(root.get("age"), queryFilter.getAgeStart(), queryFilter.getAgeEnd()),
-                builder.between(root.get("createdDate"), fromDate, toDate)));
-        if (queryFilter.isAdmin())
-            expression = builder.and(expression, builder.equal(root.get("isAdmin"), queryFilter.isAdmin()));
         return expression;
-
     }
 }

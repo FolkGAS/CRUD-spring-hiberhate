@@ -48,8 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public int usersCount(UsersFilter filter){
+    public int usersCount(UsersFilter filter) {
         return userDao.usersCount(filter);
     }
-
 }

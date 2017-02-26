@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@ taglib prefix="from" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page session="false" %>
 <html>
 <head>
@@ -41,7 +41,7 @@
             background-color: #f0f0f0;
         }
 
-        .tg .tg-4eph {
+        .tg {
             background-color: #f9f9f9
         }
     </style>
@@ -50,10 +50,11 @@
 
 <table>
     <tr>
+        <td width="40"></td>
         <td valign="top">
             <jsp:include page="add.jsp"/>
         </td>
-        <td width="20"></td>
+        <td width="40"></td>
         <td valign="top">
             <jsp:include page="filter.jsp"/>
         </td>
@@ -75,7 +76,8 @@
             <th width="60">Edit</th>
             <th width="60">Delete</th>
         </tr>
-        <c:forEach items="${listUsers}" var="user">
+        <c:forEach items="${listUsers}"
+                   var="user">
             <tr>
                 <td>${user.id}</td>
                 <td>${user.name}</td>
@@ -88,7 +90,8 @@
                         <img src="/resources/uncheck.png"/>
                     </c:if>
                 </td>
-                <td>${user.createdDate}</td>
+                <td><fmt:formatDate value="${user.createdDate}"
+                                    pattern="yyyy/MM/dd '&nbsp' hh:mm:ss"/> </td>
                 <td><a href="<c:url value='/edit/${user.id}'/>">Edit</a></td>
                 <td><a href="<c:url value='/remove/${user.id}'/>">Delete</a></td>
             </tr>

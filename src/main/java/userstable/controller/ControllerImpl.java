@@ -1,13 +1,10 @@
 package userstable.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import userstable.dao.UserDaoImpl;
 import userstable.model.UserEntity;
 import userstable.model.UsersFilter;
 import userstable.service.UserService;
@@ -19,29 +16,24 @@ import java.time.LocalDateTime;
 @Controller
 public class ControllerImpl {
     private UserService userService;
-    private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
-    @Autowired(required = true)
+    @Autowired
     @Qualifier(value = "userService")
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
     @ModelAttribute("filter")
-    public UsersFilter getUsersFilter(){
+    public UsersFilter getUsersFilter() {
         return new UsersFilter();
     }
 
     @RequestMapping(value = "users")
-    public String listUsers(Model model,
-                            @ModelAttribute(value = "filter") UsersFilter filter) {
-        if (filter.getEntriesPerPage() < 1)
-            filter.setEntriesPerPage(5);
-
+    public String listUsers(Model model, @ModelAttribute(value = "filter") UsersFilter filter) {
         model.addAttribute("filter", filter);
         model.addAttribute("user", new UserEntity());
         model.addAttribute("listUsers", userService.listUsers(filter));
-        model.addAttribute("pagesCount", (int)Math.ceil(userService.usersCount(filter) * 1.0 / filter.getEntriesPerPage()));
+        model.addAttribute("pagesCount", (int) Math.ceil(userService.usersCount(filter) * 1.0 / filter.getUsersPerPage()));
         return "users";
     }
 
@@ -68,7 +60,7 @@ public class ControllerImpl {
         model.addAttribute("filter", filter);
         model.addAttribute("user", userService.getUserById(id));
         model.addAttribute("listUsers", userService.listUsers(filter));
-        model.addAttribute("pagesCount", (int)Math.ceil(userService.usersCount(filter) * 1.0 / filter.getEntriesPerPage()));
+        model.addAttribute("pagesCount", (int) Math.ceil(userService.usersCount(filter) * 1.0 / filter.getUsersPerPage()));
         return "users";
     }
 }

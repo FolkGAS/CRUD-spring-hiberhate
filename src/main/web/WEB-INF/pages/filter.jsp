@@ -1,7 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@ taglib prefix="from" uri="http://www.springframework.org/tags/form" %>
 
 <h1>Filter</h1>
 <c:url var="filterUsers" value="/users"/>
@@ -15,7 +14,10 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="idStart" size="10" pattern="\d*"/>
+                <form:input path="idStart"
+                            size="10"
+                            pattern="\d*"
+                            title="positive number"/>
             </td>
             <td>
                 <form:label path="idEnd">
@@ -23,7 +25,10 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="idEnd" size="10" pattern="\d*"/>
+                <form:input path="idEnd"
+                            size="10"
+                            pattern="\d*"
+                            title="positive number"/>
             </td>
         </tr>
         <tr>
@@ -33,7 +38,8 @@
                 </form:label>
             </td>
             <td colspan="3">
-                <form:input path="name" size="28" placeholder=""/>
+                <form:input path="name"
+                            size="28"/>
             </td>
         </tr>
         <tr>
@@ -43,7 +49,10 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="ageStart" size="10" pattern="\d*"/>
+                <form:input path="ageStart"
+                            size="10"
+                            pattern="\d*"
+                            title="positive number"/>
             </td>
             <td>
                 <form:label path="ageEnd">
@@ -51,7 +60,10 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="ageEnd" size="10" pattern="\d*"/>
+                <form:input path="ageEnd"
+                            size="10"
+                            pattern="\d*"
+                            title="positive number"/>
             </td>
         </tr>
         <tr>
@@ -61,7 +73,10 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="dateStart" size="10" placeholder="2000/01/01" pattern="\d{4}/\d{2}/\d{2}"/>
+                <form:input path="dateStart" size="10"
+                            placeholder="2000/01/01"
+                            pattern="\d{4}/\d{2}/\d{2}"
+                            title="yyyy/mm/dd"/>
             </td>
             <td>
                 <form:label path="dateEnd">
@@ -69,7 +84,10 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="dateEnd" size="10" placeholder="3000/01/01" pattern="\d{4}/\d{2}/\d{2}"/>
+                <form:input path="dateEnd" size="10"
+                            placeholder="3000/01/01"
+                            pattern="\d{4}/\d{2}/\d{2}"
+                            title="yyyy/mm/dd"/>
             </td>
         </tr>
         <tr>
@@ -84,7 +102,9 @@
         </tr>
         <tr>
             <td>
-                <input type="hidden" name="page" value="${1}"/>
+                <input type="hidden"
+                       name="page"
+                       value="${1}"/>
                 <input type="submit"
                        value="<spring:message text="Filter Users"/>"/>
             </td>
