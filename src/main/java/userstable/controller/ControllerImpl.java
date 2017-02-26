@@ -65,9 +65,10 @@ public class ControllerImpl {
     public String editUser(Model model,
                            @ModelAttribute(value = "filter") UsersFilter filter,
                            @PathVariable("id") int id) {
-        model.addAttribute("filter", getUsersFilter());
+        model.addAttribute("filter", filter);
         model.addAttribute("user", userService.getUserById(id));
         model.addAttribute("listUsers", userService.listUsers(filter));
+        model.addAttribute("pagesCount", (int)Math.ceil(userService.usersCount(filter) * 1.0 / filter.getEntriesPerPage()));
         return "users";
     }
 

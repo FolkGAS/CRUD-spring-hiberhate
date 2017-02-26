@@ -112,9 +112,15 @@ public class UserDaoImpl implements UserDao {
         if (queryFilter.getAgeEnd() == null)
             queryFilter.setAgeEnd(Integer.MAX_VALUE);
         if (queryFilter.getDateStart() == null || !queryFilter.getDateStart().trim().matches("\\d{4}/\\d{2}/\\d{2}"))
+        {
             queryFilter.setDateStart("2000/01/01");
+            filter.setDateStart("");
+        }
         if (queryFilter.getDateEnd() == null || !queryFilter.getDateEnd().trim().matches("\\d{4}/\\d{2}/\\d{2}"))
+        {
             queryFilter.setDateEnd("3000/01/01");
+            filter.setDateEnd("");
+        }
         if (queryFilter.getEntriesPerPage() < 1)
             queryFilter.setEntriesPerPage(5);
         if (queryFilter.getPage() < 1)
