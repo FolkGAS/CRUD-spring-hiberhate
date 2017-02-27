@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ page session="false" %>
+
 <html>
 <head>
     <title>Users Page</title>
@@ -44,12 +44,11 @@
         }
     </style>
 </head>
-<body>
-
-<table width="100%" height="100%">
+<body bgcolor="#dcdcdc">
+<table width="100%">
     <tr>
-        <td width="20%" bgcolor="#dcdcdc"></td>
-        <td width="60%" bgcolor="white" valign="top">
+        <td width="20%"></td>
+        <td width="60%" bgcolor="white">
             <table width="100%">
                 <tr>
                     <td width="50%">
@@ -61,6 +60,7 @@
                 </tr>
                 <tr>
                     <td colspan="2">
+
                         <h1>List of users</h1>
                     </td>
                 </tr>
@@ -113,61 +113,8 @@
                 </tr>
             </table>
         </td>
-        <td width="20%" bgcolor="#dcdcdc"></td>
+        <td width="20%"></td>
     </tr>
 </table>
-
-
-<%--<table>--%>
-<%--<tr>--%>
-<%--<td width="40"> 111</td>--%>
-
-<%--<td valign="top">--%>
-<%--<jsp:include page="add.jsp"/>--%>
-<%--</td>--%>
-<%--<td width="40"></td>--%>
-<%--<td valign="top">--%>
-<%--<jsp:include page="filter.jsp"/>--%>
-<%--</td>--%>
-<%--<h1>List of users</h1>--%>
-
-<%--<jsp:include page="paging.jsp"/>--%>
-
-<%--<c:if test="${!empty listUsers}">--%>
-<%--<table class="tg">--%>
-<%--<tr>--%>
-<%--<th width="40">ID</th>--%>
-<%--<th width="200">Name</th>--%>
-<%--<th width="40">Age</th>--%>
-<%--<th width="20">Admin</th>--%>
-<%--<th width="150">Date</th>--%>
-<%--<th width="60">Edit</th>--%>
-<%--<th width="60">Delete</th>--%>
-<%--</tr>--%>
-<%--<c:forEach items="${listUsers}"--%>
-<%--var="user">--%>
-<%--<tr>--%>
-<%--<td>${user.id}</td>--%>
-<%--<td>${user.name}</td>--%>
-<%--<td>${user.age}</td>--%>
-<%--<td>--%>
-<%--<c:if test="${true == user.admin}">--%>
-<%--<img src="/resources/check.png"/>--%>
-<%--</c:if>--%>
-<%--<c:if test="${false == user.admin}">--%>
-<%--<img src="/resources/uncheck.png"/>--%>
-<%--</c:if>--%>
-<%--</td>--%>
-<%--<td><fmt:formatDate value="${user.createdDate}"--%>
-<%--pattern="yyyy/MM/dd '&nbsp' hh:mm:ss"/></td>--%>
-<%--<td><a href="<c:url value='/edit/${user.id}'/>">Edit</a></td>--%>
-<%--<td><a href="<c:url value='/remove/${user.id}'/>">Delete</a></td>--%>
-<%--</tr>--%>
-<%--</c:forEach>--%>
-<%--</table>--%>
-<%--</c:if>--%>
-<%--</tr>--%>
-<%--</table>--%>
-
 </body>
 </html>

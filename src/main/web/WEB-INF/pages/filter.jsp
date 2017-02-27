@@ -2,6 +2,13 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
+<html>
+<head>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
 <h1>Filter</h1>
 <c:url var="filterUsers" value="/users"/>
 
@@ -111,4 +118,5 @@
         </tr>
     </table>
 </form:form>
-
+</body>
+</html>
