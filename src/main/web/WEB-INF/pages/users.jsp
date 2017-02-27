@@ -3,16 +3,17 @@
 
 <html>
 <head>
-    <title>Users Page</title>
+    <title>Users Manager</title>
 
     <style type="text/css">
-        .tg {
+        .tHead {
             border-collapse: collapse;
             border-spacing: 0;
             border-color: #ccc;
+            background-color: #f9f9f9
         }
 
-        .tg td {
+        .tHead td {
             font-family: Arial, sans-serif;
             font-size: 14px;
             padding: 10px 5px;
@@ -25,7 +26,7 @@
             background-color: #fff;
         }
 
-        .tg th {
+        .tHead th {
             font-family: Arial, sans-serif;
             font-size: 14px;
             font-weight: normal;
@@ -39,9 +40,20 @@
             background-color: #f0f0f0;
         }
 
-        .tg {
-            background-color: #f9f9f9
+        .tAddFilter {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            padding: 10px;
+            border-style: solid;
+            border-width: 1px;
+            overflow: hidden;
+            word-break: normal;
+            border-color: #ccc;
+            color: #333;
+            background-color: white;
         }
+
     </style>
 </head>
 <body bgcolor="#dcdcdc">
@@ -49,7 +61,7 @@
     <tr>
         <td width="20%"></td>
         <td width="60%" bgcolor="white">
-            <table width="100%">
+            <table class="tAddFilter" width="100%">
                 <tr>
                     <td width="50%">
                         <jsp:include page="add.jsp"/>
@@ -60,7 +72,6 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-
                         <h1>List of users</h1>
                     </td>
                 </tr>
@@ -71,7 +82,7 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <table class="tg" width="100%">
+                        <table class="tHead" width="100%">
                             <tr>
                                 <th width="40">ID</th>
                                 <th width="300">Name</th>

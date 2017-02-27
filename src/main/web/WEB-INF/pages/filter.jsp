@@ -4,13 +4,12 @@
 
 <html>
 <head>
-    <style type="text/css">
-
-    </style>
 </head>
 <body>
 <h1>Filter</h1>
 <c:url var="filterUsers" value="/users"/>
+<c:set var="numSize" value="20"/>
+<c:set var="stringSize" value="48"/>
 
 <form:form action="${filterUsers}" commandName="filter">
     <table>
@@ -22,7 +21,7 @@
             </td>
             <td>
                 <form:input path="idStart"
-                            size="10"
+                            size="${numSize}"
                             pattern="\d*"
                             title="positive number"/>
             </td>
@@ -33,7 +32,7 @@
             </td>
             <td>
                 <form:input path="idEnd"
-                            size="10"
+                            size="${numSize}"
                             pattern="\d*"
                             title="positive number"/>
             </td>
@@ -46,7 +45,7 @@
             </td>
             <td colspan="3">
                 <form:input path="name"
-                            size="28"/>
+                            size="${stringSize}"/>
             </td>
         </tr>
         <tr>
@@ -57,7 +56,7 @@
             </td>
             <td>
                 <form:input path="ageStart"
-                            size="10"
+                            size="${numSize}"
                             pattern="\d*"
                             title="positive number"/>
             </td>
@@ -68,7 +67,7 @@
             </td>
             <td>
                 <form:input path="ageEnd"
-                            size="10"
+                            size="${numSize}"
                             pattern="\d*"
                             title="positive number"/>
             </td>
@@ -80,7 +79,8 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="dateStart" size="10"
+                <form:input path="dateStart"
+                            size="${numSize}"
                             placeholder="2000/01/01"
                             pattern="\d{4}/\d{2}/\d{2}"
                             title="yyyy/mm/dd"/>
@@ -91,7 +91,8 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="dateEnd" size="10"
+                <form:input path="dateEnd"
+                            size="${numSize}"
                             placeholder="3000/01/01"
                             pattern="\d{4}/\d{2}/\d{2}"
                             title="yyyy/mm/dd"/>
