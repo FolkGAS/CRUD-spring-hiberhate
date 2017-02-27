@@ -1,13 +1,21 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
+<html>
+<head>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
 <h1>Add a User</h1>
 <c:url var="addAction" value="/users/add"/>
+<c:set var="stringSize" value="50"/>
 
 <form:form action="${addAction}" commandName="user">
-    <table>
+    <table width="100%">
         <c:if test="${!empty user.id}">
             <tr>
                 <td>
@@ -17,6 +25,7 @@
                 </td>
                 <td>
                     <form:input path="id"
+                                size="${stringSize}"
                                 readonly="true"
                                 disabled="true"/>
                 </td>
@@ -30,6 +39,7 @@
             </td>
             <td>
                 <form:input path="name"
+                            size="${stringSize}"
                             required="true"/>
             </td>
         </tr>
@@ -41,6 +51,7 @@
             </td>
             <td>
                 <form:input path="age"
+                            size="${stringSize}"
                             pattern="[1-9]+\d*"
                             required="true"
                             title="positive number"/>
@@ -58,6 +69,7 @@
                                 var="formattedDate"/>
 
                 <form:input path="createdDate"
+                            size="${stringSize}"
                             readonly="true"
                             disabled="true"
                             value="${formattedDate}"/>
@@ -87,3 +99,5 @@
         </tr>
     </table>
 </form:form>
+</body>
+</html>
