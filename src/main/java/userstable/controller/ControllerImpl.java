@@ -40,6 +40,8 @@ public class ControllerImpl {
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)
     public String addUser(@ModelAttribute("user") UserEntity userEntity) {
         userEntity.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
+
+        // choose add or edit entry by ID check.
         if (userEntity.getId() == 0)
             userService.addUser(userEntity);
         else
@@ -60,6 +62,7 @@ public class ControllerImpl {
         model.addAttribute("filter", filter);
         model.addAttribute("user", userService.getUserById(id));
         model.addAttribute("listUsers", userService.listUsers(filter));
+        //Some magic for correct page count.
         model.addAttribute("pagesCount", (int) Math.ceil(userService.usersCount(filter) * 1.0 / filter.getUsersPerPage()));
         return "users";
     }

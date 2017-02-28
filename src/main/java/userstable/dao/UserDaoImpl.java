@@ -92,17 +92,20 @@ public class UserDaoImpl implements UserDao {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Long> cquery = builder.createQuery(Long.class);
         Root<UserEntity> root = cquery.from(UserEntity.class);
-
         cquery.select(builder.count(root)).where(getExpression(filter, builder, root));
         return (session.createQuery(cquery).getSingleResult()).intValue();
     }
 
+    // Getting Expression by filter for Hibernate.javax.persistence query.
     private Expression<Boolean> getExpression(UsersFilter filter, CriteriaBuilder builder, Root<UserEntity> root) {
         DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
         Expression<Boolean> expression = builder.ge(root.get("id"), 0);
-        if (filter.getUsersPerPage() < 1)
-            filter.setUsersPerPage(5);
 
+        //Set default users per page value.
+        if (filter.getUsersPerPage() < 1)
+            filter.setUsersPerPage(10);
+
+        //Set default page value.
         if (filter.getPage() < 1)
             filter.setPage(1);
 
@@ -124,6 +127,7 @@ public class UserDaoImpl implements UserDao {
         if (filter.isAdmin())
             expression = builder.and(expression, builder.equal(root.get("isAdmin"), filter.isAdmin()));
 
+        // Check date for yyyy/MM/dd.
         if (filter.getDateStart() != null && filter.getDateStart().trim().matches("\\d{4}/\\d{2}/\\d{2}")) {
             Timestamp fromDate;
             try {
@@ -135,6 +139,7 @@ public class UserDaoImpl implements UserDao {
             expression = builder.and(expression, builder.greaterThanOrEqualTo(root.get("createdDate"), fromDate));
         }
 
+        // Check date for yyyy/MM/dd.
         if (filter.getDateEnd() != null && filter.getDateEnd().trim().matches("\\d{4}/\\d{2}/\\d{2}")) {
             Timestamp toDate;
             try {

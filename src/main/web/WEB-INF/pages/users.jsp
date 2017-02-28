@@ -63,9 +63,11 @@
         <td width="60%" bgcolor="white">
             <table class="tAddFilter" width="100%">
                 <tr>
+                        <%--ADD PAGE--%>
                     <td width="50%">
                         <jsp:include page="add.jsp"/>
                     </td>
+                        <%--FILTER PAGE--%>
                     <td width="50%">
                         <jsp:include page="filter.jsp"/>
                     </td>
@@ -76,6 +78,7 @@
                     </td>
                 </tr>
                 <tr>
+                        <%--PAGING MENU--%>
                     <td colspan="2">
                         <jsp:include page="paging.jsp"/>
                     </td>
@@ -107,6 +110,7 @@
                                                 <img src="/resources/uncheck.png"/>
                                             </c:if>
                                         </td>
+                                            <%--FORMATTING OUTPUT DATE--%>
                                         <td><fmt:formatDate value="${user.createdDate}"
                                                             pattern="yyyy/MM/dd '&nbsp' hh:mm:ss"/></td>
                                         <td><a href="<c:url value='/edit/${user.id}'/>">Edit</a></td>
@@ -118,6 +122,7 @@
                     </td>
                 </tr>
                 <tr>
+                        <%--PAGING MENU--%>
                     <td colspan="2">
                         <jsp:include page="paging.jsp"/>
                     </td>

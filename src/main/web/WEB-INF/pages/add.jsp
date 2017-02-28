@@ -17,6 +17,7 @@
 <form:form action="${addAction}" commandName="user">
     <table width="100%">
         <c:if test="${!empty user.id}">
+            <%--USER CAN'T CHANGE ID--%>
             <tr>
                 <td>
                     <form:label path="id">
@@ -49,6 +50,7 @@
                     <spring:message text="Age"/>
                 </form:label>
             </td>
+                <%--CHECK FOR NUMBERS STARTS FROM 1-9 --%>
             <td>
                 <form:input path="age"
                             size="${stringSize}"
@@ -63,6 +65,7 @@
                     <spring:message text="Created"/>
                 </form:label>
             </td>
+                <%--USER CAN'T CHANGE DATE--%>
             <td>
                 <fmt:formatDate value="${user.createdDate}"
                                 pattern="yyyy/MM/dd hh:mm:ss"

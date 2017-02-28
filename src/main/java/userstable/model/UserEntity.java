@@ -1,3 +1,6 @@
+/*
+User Entity
+*/
 package userstable.model;
 
 import org.hibernate.annotations.Type;

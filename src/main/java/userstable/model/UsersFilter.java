@@ -1,3 +1,7 @@
+/*
+Filter by id, name, age, date. Include information about users per page.
+Used in POST requests.
+*/
 package userstable.model;
 
 public class UsersFilter {

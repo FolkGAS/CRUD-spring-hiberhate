@@ -19,6 +19,7 @@
                     <spring:message text="ID from"/>
                 </form:label>
             </td>
+                <%--CHECK FOR NUMBERS --%>
             <td>
                 <form:input path="idStart"
                             size="${numSize}"
@@ -30,6 +31,7 @@
                     <spring:message text="to"/>
                 </form:label>
             </td>
+                <%--CHECK FOR NUMBERS --%>
             <td>
                 <form:input path="idEnd"
                             size="${numSize}"
@@ -54,6 +56,7 @@
                     <spring:message text="Age from"/>
                 </form:label>
             </td>
+                <%--CHECK FOR NUMBERS --%>
             <td>
                 <form:input path="ageStart"
                             size="${numSize}"
@@ -65,6 +68,7 @@
                     <spring:message text="to"/>
                 </form:label>
             </td>
+                <%--CHECK FOR NUMBERS --%>
             <td>
                 <form:input path="ageEnd"
                             size="${numSize}"
@@ -78,6 +82,7 @@
                     <spring:message text="Created from"/>
                 </form:label>
             </td>
+                <%--CHECK FOR DATE FORMAT yyyy/MM/dd --%>
             <td>
                 <form:input path="dateStart"
                             size="${numSize}"
@@ -90,6 +95,7 @@
                     <spring:message text="to"/>
                 </form:label>
             </td>
+                <%--CHECK FOR DATE FORMAT yyyy/MM/dd --%>
             <td>
                 <form:input path="dateEnd"
                             size="${numSize}"
@@ -109,6 +115,7 @@
             </td>
         </tr>
         <tr>
+                <%--SET FIRST PAGE AFTER FILTERING--%>
             <td>
                 <input type="hidden"
                        name="page"

@@ -34,16 +34,17 @@
     <tr>
         <c:url var="pages" value="/users"/>
 
+        <%--PADDING MENU--%>
         <form:form action="${pages}" commandName="filter">
             <td>
                 <form:select path="usersPerPage"
                              size="1"
                              onchange="if (this.selectedIndex) this.form.submit()">
                     <option value="${filter.usersPerPage}">${filter.usersPerPage}</option>
-                    <option value="1">1</option>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
+                    <option value="50">50</option>
                     <option value="${pagesCount*filter.usersPerPage}">all</option>
                     <input type="hidden"
                            name="page"
@@ -51,6 +52,8 @@
                 </form:select>
             </td>
         </form:form>
+
+        <%--FIRST PAGE LINK--%>
         <form:form action="${pages}" commandName="filter">
             <td>
                 <input type="hidden"
@@ -61,6 +64,8 @@
                        value="<spring:message text="first"/>"/>
             </td>
         </form:form>
+
+        <%--PREVIOUS PAGE LINK--%>
         <form:form action="${pages}" commandName="filter">
             <td>
                 <c:if test="${filter.page < 1}">
@@ -78,6 +83,8 @@
                        value="<spring:message text="prev"/>"/>
             </td>
         </form:form>
+
+        <%--PAGE LINKS FOR SHORT QUERY--%>
         <form:form action="${pages}" commandName="filter">
             <c:if test="${pagesCount < 12}">
                 <c:forEach begin="1"
@@ -93,13 +100,16 @@
                         <c:if test="${i.index != filter.page}">
                             <input class="otherPage" type="submit"
                                    name="page"
-                                   style="width:30px"
                                    value="${i.index}"/>
                         </c:if>
                     </td>
                 </c:forEach>
             </c:if>
+
+            <%--PAGE LINKS FOR LONG QUERY ( +-5 LINKS)--%>
             <c:if test="${pagesCount > 11}">
+
+                <%--LEFT BORDER--%>
                 <c:if test="${filter.page < 6}">
                     <c:forEach begin="${1}"
                                end="${11}"
@@ -114,12 +124,12 @@
                             <c:if test="${i.index != filter.page}">
                                 <input class="otherPage" type="submit"
                                        name="page"
-                                       style="width:30px"
                                        value="${i.index}"/>
                             </c:if>
                         </td>
                     </c:forEach>
                 </c:if>
+
                 <c:if test="${filter.page > 5 && filter.page < pagesCount-4}">
                     <c:forEach begin="${filter.page-5}"
                                end="${filter.page+5}"
@@ -134,12 +144,13 @@
                             <c:if test="${i.index != filter.page}">
                                 <input class="otherPage" type="submit"
                                        name="page"
-                                       style="width:30px"
                                        value="${i.index}"/>
                             </c:if>
                         </td>
                     </c:forEach>
                 </c:if>
+
+                <%--RIGHT BORDER--%>
                 <c:if test="${filter.page > pagesCount-5}">
                     <c:forEach begin="${pagesCount-10}"
                                end="${pagesCount}"
@@ -155,7 +166,6 @@
                                 <input class="otherPage"
                                        type="submit"
                                        name="page"
-                                       style="width:30px"
                                        value="${i.index}"/>
                             </c:if>
                         </td>
@@ -164,6 +174,8 @@
             </c:if>
         </form:form>
         </td>
+
+        <%--NEXT PAGE LINK--%>
         <form:form action="${pages}" commandName="filter">
             <td>
                 <c:if test="${filter.page >= pagesCount}">
@@ -182,6 +194,8 @@
                        value="<spring:message text="next"/>"/>
             </td>
         </form:form>
+
+        <%--LAST PAGE LINK--%>
         <form:form action="${pages}" commandName="filter">
             <td>
                 <input type="hidden"
