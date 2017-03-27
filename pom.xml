@@ -160,12 +160,15 @@
     </dependencies>
 
     <build>
+        <finalName>CRUD</finalName>
+        <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <webXml>src\main\web\WEB-INF\web.xml</webXml>
+                    <webXml>src/main/web/WEB-INF/web.xml</webXml>
+                    <warSourceDirectory>${basedir}/src/main/web/</warSourceDirectory>
                 </configuration>
             </plugin>
 

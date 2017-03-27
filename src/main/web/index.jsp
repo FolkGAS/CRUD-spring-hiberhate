@@ -3,12 +3,12 @@
 <html>
 <head>
     <title>User Manager</title>
-    <meta http-equiv="refresh" content="0; url=/users" />
+    <meta http-equiv="refresh" content="0; url=users" />
 </head>
 <body>
 <h3>USER MANAGER</h3>
 <br/>
-<a href="<c:url value="/users"/>">Users list</a>
+<a href="<c:url value="users"/>">Users list</a>
 
 <br/>
 </body>
