@@ -28,4 +28,4 @@ Password: root
 *	Spring MVC
 
 
-![Main view] (/src/main/resources/Table.png)
+![Main view](/src/main/resources/Table.png)
